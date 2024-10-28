@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class ActivityResultProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'int', required=True),
+        'id': FieldMapping('id', 'id', 'int', required=True, is_primary_key=True),
         'company_id': FieldMapping('companyId', 'company_id', 'int'),
         'name': FieldMapping('name', 'name', 'string'),
         'email_success': FieldMapping('emailSuccess', 'email_success', 'boolean', default=False),

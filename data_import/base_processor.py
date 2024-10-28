@@ -29,7 +29,6 @@ class ProcessingResult:
         if self.errors is None:
             self.errors = []
 
-
 @dataclass
 class FieldMapping:
     xml_field: str
@@ -37,6 +36,7 @@ class FieldMapping:
     field_type: FieldType
     required: bool = False
     default: Any = None
+    is_primary_key: bool = False
 
     def __post_init__(self):
         if isinstance(self.field_type, str):
@@ -89,14 +89,13 @@ class BaseProcessor:
         """Cache model fields to improve performance."""
         return {field.name for field in model._meta.fields if not field.primary_key}
 
-    def extract_data(self, properties, field_mappings: Dict[str, FieldMapping]) -> Tuple[Optional[UUID], Dict[str, Any]]:
+    def extract_data(self, properties, field_mappings: Dict[str, FieldMapping]) -> Dict[str, Any]:
         """Extract and validate data from XML properties."""
         if properties is None:
             self.logger.error("No properties found in XML")
-            return None, {}
+            return {}
 
         data = {}
-        object_id = None
         has_required_fields = True
 
         for key, mapping in field_mappings.items():
@@ -110,10 +109,7 @@ class BaseProcessor:
 
             data[mapping.model_field] = parsed_value if parsed_value is not None else mapping.default
 
-            if key == 'id':
-                object_id = parsed_value
-
-        return (object_id, data) if has_required_fields else (None, {})
+        return data if has_required_fields else {}
 
     async def process_entries(
         self,
@@ -122,7 +118,7 @@ class BaseProcessor:
         field_mappings: Dict[str, FieldMapping],
         batch_size: int
     ) -> int:
-        """Process entries with enhanced error handling and metrics."""
+        """Process entries with support for models with or without primary keys."""
         result = ProcessingResult(
             total_processed=len(entries),
             successful=0,
@@ -131,40 +127,59 @@ class BaseProcessor:
         )
 
         try:
-            valid_records: List[Tuple[UUID, Dict[str, Any]]] = []
-            record_ids: List[UUID] = []
+            # Find primary key mapping if it exists
+            pk_mapping = next(
+                (mapping for mapping in field_mappings.values() if mapping.is_primary_key),
+                None
+            )
+            
+            valid_records = []
+            record_ids = []
 
             # Process entries in chunks for better memory management
             for i in range(0, len(entries), batch_size):
                 chunk = entries[i:i + batch_size]
                 for entry in chunk:
                     properties = entry.find('.//m:properties', namespaces=self.data_processor.nsmap)
-                    object_id, data = self.extract_data(properties, field_mappings)
+                    data = self.extract_data(properties, field_mappings)
                     
-                    if object_id and data:
-                        valid_records.append((object_id, data))
-                        record_ids.append(object_id)
+                    if data:
+                        if pk_mapping:
+                            pk_value = data.get(pk_mapping.model_field)
+                            if pk_value:
+                                valid_records.append((pk_value, data))
+                                record_ids.append(pk_value)
+                            else:
+                                result.failed += 1
+                        else:
+                            # For models without primary key, just store the data
+                            valid_records.append((None, data))
                     else:
                         result.failed += 1
 
             if not valid_records:
                 return result.successful
 
-            # Fetch existing records
-            existing_records = await sync_to_async(lambda: set(
-                model.objects.filter(id__in=record_ids).values_list('id', flat=True)
-            ))()
+            # Handle records based on whether we have primary keys
+            if pk_mapping:
+                # Fetch existing records
+                existing_records = await sync_to_async(lambda: set(
+                    model.objects.filter(id__in=record_ids).values_list('id', flat=True)
+                ))()
 
-            # Prepare records for database operations
-            records_to_insert = []
-            records_to_update = []
+                # Prepare records for database operations
+                records_to_insert = []
+                records_to_update = []
 
-            for object_id, data in valid_records:
-                data['id'] = object_id
-                if object_id in existing_records:
-                    records_to_update.append(model(**data))
-                else:
-                    records_to_insert.append(model(**data))
+                for pk_value, data in valid_records:
+                    if pk_value in existing_records:
+                        records_to_update.append(model(**data))
+                    else:
+                        records_to_insert.append(model(**data))
+            else:
+                # For models without primary key, all records are new insertions
+                records_to_insert = [model(**data) for _, data in valid_records]
+                records_to_update = []
 
             # Perform database operations
             await self.bulk_operations(model, records_to_insert, records_to_update, batch_size)

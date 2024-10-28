@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class JobProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'contact_id': FieldMapping('contactId', 'contact_id', 'uuid'),
         'inquiry_id': FieldMapping('inquiryId', 'inquiry_id', 'uuid'),
         'site': FieldMapping('site', 'site', 'string'),

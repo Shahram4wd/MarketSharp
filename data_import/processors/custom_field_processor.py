@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class CustomFieldProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'name': FieldMapping('name', 'name', 'string'),
         'value': FieldMapping('value', 'value', 'string'),
         'contact_id': FieldMapping('contactId', 'contact_id', 'uuid'),

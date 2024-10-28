@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class ProspectProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'company_id': FieldMapping('companyId', 'company_id', 'int'),
         'first_name': FieldMapping('firstName', 'first_name', 'string'),
         'last_name': FieldMapping('lastName', 'last_name', 'string'),

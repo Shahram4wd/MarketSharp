@@ -40,7 +40,7 @@ class DataProcessor:
             root = ET.fromstring(sanitized_xml_data.encode('utf-8'))
             return root.findall('.//atom:entry', namespaces=self.nsmap)
         except ET.XMLSyntaxError as e:
-            self.logger.error(f"Error parsing XML: {e}")
+            self.logger.error(f"XML parsing error: {str(e)}", exc_info=True)
             raise
 
     def get_xml_text(self, parent, tag_name):

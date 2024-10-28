@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class ProductInterestProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'inquiry_id': FieldMapping('inquiryId', 'inquiry_id', 'uuid'),
         'product_type_id': FieldMapping('productTypeId', 'product_type_id', 'uuid'),
         'product_detail_id': FieldMapping('productDetailId', 'product_detail_id', 'uuid'),

@@ -223,56 +223,28 @@ class Contact(models.Model):
 
 
 class ContactPhone(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    company_id = models.IntegerField()
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    last_name = models.CharField(max_length=100, blank=True, null=True)
-    middle_initial = models.CharField(max_length=1, blank=True, null=True)
-    title = models.CharField(max_length=255, blank=True, null=True)
-    income_code = models.CharField(max_length=100, blank=True, null=True)
-    age_code = models.CharField(max_length=100, blank=True, null=True)
-    structure_age_code = models.CharField(max_length=100, blank=True, null=True)
-    reference = models.CharField(max_length=255, blank=True, null=True)
-    business_name = models.CharField(max_length=255, blank=True, null=True)
-    contact_phone_id = models.UUIDField(blank=True, null=True)
-    primary_address_id = models.UUIDField(blank=True, null=True)
-    website1 = models.URLField(blank=True, null=True)
-    website2 = models.URLField(blank=True, null=True)
-    website3 = models.URLField(blank=True, null=True)
-    email1 = models.EmailField(blank=True, null=True)
-    email1_can_mail = models.BooleanField(default=False)
-    email2 = models.EmailField(blank=True, null=True)
-    email2_can_mail = models.BooleanField(default=False)
-    email3 = models.EmailField(blank=True, null=True)
-    email3_can_mail = models.BooleanField(default=False)
-    is_tagged = models.BooleanField(blank=True, null=True)
-    structure_value_code = models.CharField(max_length=100, blank=True, null=True)
-    do_not_mail = models.BooleanField(blank=True, null=True)
-    year_home_built = models.CharField(max_length=4, blank=True, null=True)
-    marital_status = models.CharField(max_length=50, blank=True, null=True)
-    length_of_residence = models.CharField(max_length=50, blank=True, null=True)
-    style_of_home = models.CharField(max_length=100, blank=True, null=True)
-    mail_merge_name = models.CharField(max_length=255, blank=True, null=True)
-    source = models.CharField(max_length=255)
-    creation_date = models.DateTimeField()
-    qb_sync_date = models.DateTimeField(blank=True, null=True)
-    qb_id = models.CharField(max_length=100, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    last_update = models.DateTimeField()
-    has_dnc_phone = models.BooleanField(default=False)
-    has_dne_email = models.BooleanField(default=False)
-    qb_edit_sequence = models.CharField(max_length=255, blank=True, null=True)
-    qb_sync_data = models.BooleanField(blank=True, null=True)
-    qb_name = models.CharField(max_length=255, blank=True, null=True)
-    created_date = models.DateTimeField()
+    contact_id = models.UUIDField()  # Foreign key to Contact model
+    assistant_phone = models.CharField(max_length=20, blank=True, null=True)
+    work_fax = models.CharField(max_length=20, blank=True, null=True)
+    cell_phone = models.CharField(max_length=20, blank=True, null=True)
+    company_phone = models.CharField(max_length=20, blank=True, null=True)
+    home_phone2 = models.CharField(max_length=20, blank=True, null=True)
+    home_fax = models.CharField(max_length=20, blank=True, null=True)
+    pager = models.CharField(max_length=20, blank=True, null=True)
+    work_phone2 = models.CharField(max_length=20, blank=True, null=True)
+    company_fax = models.CharField(max_length=20, blank=True, null=True)
+    home_phone = models.CharField(max_length=20, blank=True, null=True)
+    work_phone = models.CharField(max_length=20, blank=True, null=True)
+    other_phone = models.CharField(max_length=20, blank=True, null=True)
+    cell_phone2 = models.CharField(max_length=20, blank=True, null=True)
+    other_phone2 = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         verbose_name = "Contact Phone"
         verbose_name_plural = "Contact Phones"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}" if self.first_name and self.last_name else str(self.id)
-
+        return f"Phones for Contact ID: {self.contact_id}"
 
 
 class ContactType(models.Model):

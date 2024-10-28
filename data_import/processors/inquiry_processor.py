@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class InquiryProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'contact_id': FieldMapping('contactId', 'contact_id', 'uuid'),
         'description': FieldMapping('description', 'description', 'string'),
         'inquiry_source_primary_id': FieldMapping('inquirySourcePrimaryId', 'inquiry_source_primary_id', 'uuid'),

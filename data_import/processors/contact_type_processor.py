@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class ContactTypeProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'contact_id': FieldMapping('contactId', 'contact_id', 'uuid'),
         'contact_type': FieldMapping('contactType', 'contact_type', 'string'),
         'is_active': FieldMapping('isActive', 'is_active', 'boolean', default=True),

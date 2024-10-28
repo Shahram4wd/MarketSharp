@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class EmployeeProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'name': FieldMapping('name', 'name', 'string'),
         'is_active': FieldMapping('isActive', 'is_active', 'boolean', default=True),
         'last_update': FieldMapping('lastUpdate', 'last_update', 'datetime'),

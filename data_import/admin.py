@@ -280,20 +280,24 @@ class AppointmentResultAdmin(admin.ModelAdmin):
 
 @admin.register(ContactPhone)
 class ContactPhoneAdmin(admin.ModelAdmin):
-    list_display = ('contact_id', 'cell_phone', 'work_phone', 'home_phone')
-    search_fields = ('contact_id', 'cell_phone', 'work_phone', 'home_phone')
+    list_display = ('contact_id', 'cell_phone', 'home_phone', 'work_phone', 'company_phone')
+    search_fields = ('contact_id', 'cell_phone', 'home_phone', 'work_phone', 'company_phone')
+    list_filter = ('cell_phone', 'home_phone', 'work_phone', 'company_phone')
     ordering = ('contact_id',)
 
     fieldsets = (
         (None, {
             'fields': ('contact_id',)
         }),
-        ('Phone Information', {
+        ('Phones', {
             'fields': (
-                'assistant_phone', 'work_fax', 'cell_phone', 'company_phone',
-                'home_phone2', 'home_fax', 'pager', 'work_phone2', 'company_fax',
-                'home_phone', 'work_phone', 'other_phone', 'cell_phone2', 'other_phone2'
+                'cell_phone', 'cell_phone2', 'home_phone', 'home_phone2', 
+                'work_phone', 'work_phone2', 'company_phone', 'assistant_phone', 
+                'other_phone', 'other_phone2', 'pager'
             )
+        }),
+        ('Fax Numbers', {
+            'fields': ('work_fax', 'home_fax', 'company_fax')
         }),
     )
 

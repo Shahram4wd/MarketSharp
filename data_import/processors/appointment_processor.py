@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class AppointmentProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'inquiry_id': FieldMapping('inquiryId', 'inquiry_id', 'uuid'),
         'salesperson1_id': FieldMapping('salesperson1Id', 'salesperson1_id', 'uuid'),
         'salesperson2_id': FieldMapping('salesperson2Id', 'salesperson2_id', 'uuid'),

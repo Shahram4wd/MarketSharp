@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class ProductTypeProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'name': FieldMapping('name', 'name', 'string'),
         'is_active': FieldMapping('isActive', 'is_active', 'boolean', default=True),
         'company_id': FieldMapping('companyId', 'company_id', 'int'),

@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class InquirySourceSecondaryProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'uuid', required=True),
+        'id': FieldMapping('id', 'id', 'uuid', required=True, is_primary_key=True),
         'inquiry_source_primary_id': FieldMapping('inquirySourcePrimaryId', 'inquiry_source_primary_id', 'uuid'),
         'name': FieldMapping('name', 'name', 'string'),
         'is_active': FieldMapping('isActive', 'is_active', 'boolean', default=True),

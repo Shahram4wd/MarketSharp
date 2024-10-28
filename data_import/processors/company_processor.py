@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class CompanyProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'int', required=True),
+        'id': FieldMapping('id', 'id', 'int', required=True, is_primary_key=True),
         'number': FieldMapping('number', 'number', 'int'),
         'name': FieldMapping('name', 'name', 'string'),
         'owner': FieldMapping('owner', 'owner', 'string'),

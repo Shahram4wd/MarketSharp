@@ -12,7 +12,7 @@ def register_processor(registry: ProcessorRegistry):
 
 class ActivityReferenceProcessor(BaseProcessor):
     field_mappings = {
-        'id': FieldMapping('id', 'id', 'int', required=True),
+        'id': FieldMapping('id', 'id', 'int', required=True, is_primary_key=True),
         'company_id': FieldMapping('companyId', 'company_id', 'int'),
         'name': FieldMapping('name', 'name', 'string'),
         'inquiry_required': FieldMapping('inquiryRequired', 'inquiry_required', 'boolean', default=False),
